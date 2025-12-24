@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#4B5320">
-    <title>عد تنازلي التسريح</title>
+    <title>عد تنازلي للحريه</title>
     <style>
         * {
             box-sizing: border-box;
@@ -37,6 +37,31 @@
             margin-bottom: 20px;
         }
 
+        /* Total Days Section */
+        .total-days {
+            background-color: rgba(0, 0, 0, 0.6);
+            border-radius: 20px;
+            padding: 25px 15px;
+            margin: 20px auto;
+            max-width: 95%;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7);
+        }
+
+        .total-days-number {
+            font-size: 80px;
+            font-weight: bold;
+            color: #FF3333;
+            line-height: 1;
+            margin: 10px 0;
+        }
+
+        .total-days-label {
+            font-size: 24px;
+            color: #FFD700;
+            font-weight: bold;
+        }
+
+        /* Detailed Countdown */
         #countdown {
             background-color: rgba(0, 0, 0, 0.5);
             border-radius: 20px;
@@ -96,8 +121,15 @@
             margin-top: 20px;
         }
 
-        /* Extra small phones */
         @media (max-width: 380px) {
+            .total-days-number {
+                font-size: 70px;
+            }
+
+            .total-days-label {
+                font-size: 20px;
+            }
+
             .time-unit {
                 width: 85px;
                 padding: 12px 5px;
@@ -106,10 +138,6 @@
             .number {
                 font-size: 42px;
             }
-
-            h1 {
-                font-size: 24px;
-            }
         }
     </style>
 </head>
@@ -117,39 +145,45 @@
 <body>
     <div>
         <h1>الأيام المتبقية للحريه</h1>
-        <div class="english-title"><br>1 ديسمبر 2026</div>
+ 
+        <!-- Total Days Big Display -->
+        <div class="total-days">
+            <div class="total-days-number" id="totalDays">000</div>
+            <div class="total-days-label">يوم متبقي<br></div>
+        </div>
 
+        <!-- Detailed Countdown -->
         <div id="countdown">
             <div class="time-grid">
                 <div class="time-unit">
                     <span class="number" id="months">00</span>
-                    <div class="label">شهور</div>
+                    <div class="label">شهر<br></div>
                 </div>
                 <div class="time-unit">
                     <span class="number" id="days">000</span>
-                    <div class="label">أيام</div>
+                    <div class="label">يوم<br></div>
                 </div>
                 <div class="time-unit">
                     <span class="number" id="hours">00</span>
-                    <div class="label">ساعات</div>
+                    <div class="label">ساعه<br></div>
                 </div>
                 <div class="time-unit">
                     <span class="number" id="minutes">00</span>
-                    <div class="label">دقائق</div>
+                    <div class="label">دقيقه<br></div>
                 </div>
                 <div class="time-unit">
                     <span class="number" id="seconds">00</span>
-                    <div class="label">ثواني</div>
+                    <div class="label">ثانيه<br></div>
                 </div>
             </div>
         </div>
 
         <div class="motivation">هانت وكلها ترجع زي ما كانت</div>
-     </div>
+    </div>
 
     <footer>
         الحريه: ١ ديسمبر ٢٠٢٦<br>
-     </footer>
+    </footer>
 
     <script>
         const targetDate = new Date('2026-12-01T00:00:00').getTime();
@@ -160,11 +194,17 @@
             let difference = targetDate - now;
 
             if (difference <= 0) {
+                document.querySelector('.total-days').innerHTML =
+                    '<div style="font-size:60px; color:#FFD700;">🎉 التسريح النهاردة! 🎉</div><div style="font-size:36px; margin-top:20px;">مبروك يا بطل!</div>';
                 document.getElementById('countdown').innerHTML =
-                    '<div style="font-size:50px; color:#FFD700; padding:40px;">🎉 مبروووك التسريح! 🎉<br><span style="font-size:36px;">أنت حر الآن!</span><br><span style="font-size:28px; color:#F5F5DC;">Congratulations!<br>You are FREE!</span></div>';
+                    '<div style="font-size:50px; color:#FFD700; padding:40px;">أنت حر الآن!<br>Congratulations! You are FREE!</div>';
                 return;
             }
 
+            // Total days (exact)
+            const totalDays = Math.floor(difference / (1000 * 60 * 60 * 24));
+
+            // Months (approximate)
             const months = Math.floor(difference / avgMonthSeconds);
             difference -= months * avgMonthSeconds;
 
@@ -179,6 +219,8 @@
 
             const seconds = Math.floor(difference / 1000);
 
+            // Update displays
+            document.getElementById('totalDays').textContent = totalDays;
             document.getElementById('months').textContent = months.toString().padStart(2, '0');
             document.getElementById('days').textContent = days.toString().padStart(3, '0');
             document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
